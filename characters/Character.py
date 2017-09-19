@@ -29,6 +29,9 @@ class Character:
     def rect(self):
         return self.current_image().get_rect()
 
+    def rect_for_collision(self):
+        return self.rect()
+
     def current_image(self):
         if self.animation:
             image = self.animation.current_image()
@@ -42,3 +45,5 @@ class Character:
 
         return pygame.transform.scale2x(image)
 
+    def updateForTime(self, time):
+        pass

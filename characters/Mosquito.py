@@ -5,7 +5,7 @@ class Mosquito(Character):
     blood_sucking_speed = 0.1
     suck = False
     unsuck = False
-
+    hasGasMaskOn = False
     def updateForTime(self, time):
         self.x = self.x + self.speed_x * time
 
@@ -44,6 +44,9 @@ class Mosquito(Character):
             self.blood_percent = min(self.blood_percent,100)
             if self.blood_percent < 100:
                 self.score.addPoints(1*(time)/15)
+                if getattr(self.suck_target, 'afterSuck', None) is not None:
+                    self.suck_target.afterSuck(0.5*(time)/2)
+
             self.update_accelerations()
         if self.unsuck:
             self.blood_percent -= time*self.blood_sucking_speed
@@ -51,8 +54,6 @@ class Mosquito(Character):
             if self.blood_percent > 0:
                 self.score.addPoints(5*(time)/10)
             self.update_accelerations()
-
-        # print(self.x,' ', self.y)
 
     def update_accelerations(self):
         self.acceleration = self.base_acceleration*(1.3-(self.blood_percent/100))

@@ -1,13 +1,14 @@
+import pygame
+
 from characters.Character import Character
 
 class Bat(Character):
     killer = True
-    max_speed = 0.2
+    max_speed = 0.8
     def updateForTime(self, time):
         self.x = self.x + self.speed_x * time
         new_y = self.y + self.speed_y*time
         self.y = new_y
-
 
         if self.acc_x != 0:
             self.speed_x = max(min(self.speed_x+(self.acceleration*time*self.acc_x), self.max_speed), -self.max_speed)
@@ -24,10 +25,13 @@ class Bat(Character):
             else:
                 self.speed_y += self.deceleration*time
         self.animation.update(time)
+
     def update_accelerations(self, target_position):
-        x_diff = -target_position[0]-self.x
-        y_diff = -target_position[1]-self.y
-        multipliter = 0.2
-        self.acc_x = x_diff*multipliter
-        self.acc_y = y_diff*multipliter
-        
+        x_diff = -target_position[0]-self.x+20
+        y_diff = -target_position[1]-self.y+20
+        multiplier = 0.25
+        self.acc_x = x_diff*multiplier
+        self.acc_y = y_diff*multiplier
+
+    def rect_for_collision(self):
+        return pygame.Rect((35, 35), (80, 80))

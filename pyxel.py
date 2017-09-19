@@ -34,6 +34,9 @@ class Pyxel:
     def get_tile_image(self, layer, tile):
         return self.layers[layer].get_tile_image(tile)
 
+    def get_layer_image(self, layer):
+        return self.layers[layer].image
+
 
 class Layer:
     def __init__(self, file_location, index, tile_refs, tiles):
@@ -72,6 +75,9 @@ class AnimatedPyxel:
         self.last_frame = pyxel.main_layer_tile_count() - 1
         self.time_unit_last_frame = 0
         self.speed = speed
+
+    def setFrame(self, frame):
+        self.current_frame = frame
 
     def next_frame(self):
         self.current_frame += 1

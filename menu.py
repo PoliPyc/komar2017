@@ -1,49 +1,32 @@
+import os
 import pygame
-import pyxel
+import sys
+
 from game import Game
+from pyxel import Pyxel, AnimatedPyxel
 
 
 class Menu:
     ITEM_START = 'Start Game'
     ITEM_EXIT = 'Exit'
+    ITEM_CREDITS = 'Credits'
+    ITEM_RESTART = 'Restart'
 
-    def __init__(self, game):
+    def __init__(self, game, items):
         self.game = game
         self.current = 0
-        width = game.screen.get_rect().width
-        font = pygame.font.SysFont('Tahoma', 14)
-
-        self.items = []
-        half_width = width / 2
-        position_height = 100
-
-        for name in [Menu.ITEM_START, Menu.ITEM_EXIT]:
-            image = font.render(name, 1, (255, 255, 255))
-            position_width = half_width - (image.get_width() / 2)
-            vector = (position_width, position_height)
-            self.items.append(MenuItem(name, vector, image))
-            position_height += 100
-
-#        mosquito_pyxel = pyxel.Pyxel('resources/gfx/Latanie.pyxel', 'tmp')
-#        self.mosquito = pyxel.AnimatedPyxel(mosquito_pyxel)
-
-#    def update(self, time):
-#        self.mosquito.update(time)
+        pyxel = Pyxel('resources/gfx/Topesz_Latajuncy.pyxel', 'tmp')
+        self.pointer = AnimatedPyxel(pyxel)
+        self.items = items
 
     def render(self):
-        for item in self.items:
-            self.game.screen.blit(item.rendered, item.vector)
+        current_item = self.items[self.current]
+        image = self.pointer.current_image()
+        self.game.screen.blit(image, (380, current_item.y))
+        self.game.screen.blit(image, (810, current_item.y))
 
-        height = (self.current + 1) * 100
-        height += 20
-        item = self.items[self.current]
-        vector_start = (item.vector[0], height)
-        vector_end = (item.vector[0] + item.rendered.get_width(), height)
-        pygame.draw.line(self.game.screen, (255, 255, 255), vector_start, vector_end, 1)
-
-#        image = self.mosquito.current_image()
-#        self.game.screen.blit(image, (self.game.width_center(image), 70))
-
+    def update(self, time):
+        self.pointer.update(time)
 
     def handle_keys(self, keys):
         item = self.items[self.current]
@@ -59,6 +42,11 @@ class Menu:
                 self.game.scene = Game.SCENE_GAME
             if Menu.ITEM_EXIT == item.name:
                 self.game.enabled = False
+            if Menu.ITEM_CREDITS == item.name:
+                self.game.scene = Game.SCENE_CREDITS
+            if Menu.ITEM_RESTART == item.name:
+                self.game.enabled = False
+                raise Exception("Not implemmented")
 
         if self.current < 0:
             self.current = len(self.items) - 1
@@ -68,7 +56,6 @@ class Menu:
 
 
 class MenuItem:
-    def __init__(self, name, vector, rendered):
+    def __init__(self, name, y):
         self.name = name
-        self.vector = vector
-        self.rendered = rendered
+        self.y = y

@@ -1,5 +1,7 @@
 .idea
 .pdm-python
+build/
+dist/
 __pycache__/
 __pypackages__/
 

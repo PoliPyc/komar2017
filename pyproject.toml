@@ -6,7 +6,7 @@ authors = [
     {name = "eEngine Stuszken team", email = "poliakustyczny@gmail.com"},
 ]
 dependencies = [
-    "pygame>=2.5.2",
+    "pygame==1.9.4",
 ]
 requires-python = "==3.8.*"
 readme = "README.md"
@@ -15,3 +15,8 @@ license = {text = "MIT"}
 
 [tool.pdm]
 distribution = false
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pyinstaller>=6.5.0",
+]
